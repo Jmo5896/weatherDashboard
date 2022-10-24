@@ -6,10 +6,13 @@ export default function Lightning() {
   useFrame(() => {
     if (Math.random() > 0.93 || myLight.current.power > 100) {
       if (myLight.current.power < 100) {
+        const x = Math.random() * 400;
+        const y = 300 + Math.random() * 200;
+        const z = 100 + Math.random() * 100;
         myLight.current.position.set(
-          Math.random() * 400,
-          300 + Math.random() * 200,
-          100
+          Math.round(Math.random()) > 0 ? x : x * -1,
+          Math.round(Math.random()) > 0 ? y : y * -1,
+          Math.round(Math.random()) > 0 ? z : z * -1
         );
       }
       myLight.current.power = 50 + Math.random() * 500;
