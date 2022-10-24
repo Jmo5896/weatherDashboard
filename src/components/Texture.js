@@ -25,11 +25,11 @@ export default function Texture({
   return (
     <mesh
       ref={myMesh}
-      position={position}
-      rotation={rotation}
-      opacity={opacity}
+      position={position || [0, 0, 0]}
+      rotation={rotation || [0, 0, 0]}
+      opacity={opacity || 1.0}
     >
-      <planeGeometry args={dimensions} />
+      <planeGeometry args={dimensions || [50, 50]} />
       <meshLambertMaterial map={mapper} transparent />
     </mesh>
   );
