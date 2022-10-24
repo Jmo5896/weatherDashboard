@@ -18,7 +18,7 @@ function App() {
         camera={{
           fov: 60,
         }}
-        onCreated={({ camera, gl }) => {
+        onCreated={({ camera }) => {
           camera.position.setZ(1);
           camera.rotation.set(1.16, -0.12, 0.27);
           // gl.setClearColor(0x11111f);
