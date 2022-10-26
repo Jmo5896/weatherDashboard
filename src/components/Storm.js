@@ -33,7 +33,7 @@ export default function Storm() {
     /> */}
       <Clouds howMany={25} />
       <Lightning />
-      <Rain rainCount={15000} />
+      <Rain rainCount={5000} />
     </Canvas>
   );
 }

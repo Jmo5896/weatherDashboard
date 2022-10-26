@@ -4,15 +4,14 @@ import Select from "react-select";
 
 import API from "../services/api";
 
+// https://openweathermap.org/img/w/${weather.weather[0].icon}.png
+
 export default function Dashboard({ partA, part4 }) {
-  const [content, setContent] = useState({});
-  const [coor, setCoor] = useState({
-    lat: 39.31,
-    lon: -74.5,
-  });
+  const [content, setContent] = useState();
+  const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState(API.getStates());
-  const [loading, isLoading] = useState(true);
+  const [loading, isLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,10 +71,29 @@ export default function Dashboard({ partA, part4 }) {
           <Col md={9}>
             <Row>
               <Col xs={12}>
-                <div className="glass">current weather</div>
+                <div className="glass">
+                  {content && (
+                    <>
+                      <h4>
+                        Current Weather{" "}
+                        <img
+                          src={`https://openweathermap.org/img/w/${content.current.weather[0].icon}.png`}
+                          alt="weather icon"
+                        />
+                      </h4>
+                      <h5>Temperature: {content.current.temp}° F</h5>
+                      <h5>Wind: {content.current.wind_speed} mph</h5>
+                      <h5>Humidity: {content.current.humidity}%</h5>
+                      <h5>UV Index: {content.current.uvi}</h5>
+                    </>
+                  )}
+                </div>
               </Col>
               <Col xs={12}>
-                <div className="glass">5 day forecast</div>
+                <div className="glass">
+                  <h4>5 Day Forecast</h4>
+                  <h5>UNDER CONSTRUCTION</h5>
+                </div>
               </Col>
             </Row>
           </Col>
