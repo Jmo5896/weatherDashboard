@@ -11,7 +11,7 @@ import "./App.css";
 
 function App() {
   const [background, setBackground] = useState("storm");
-
+  console.log(process.env);
   return (
     <div style={{ height: "100vh" }} className="App">
       <Toggle background={background} switchBackground={setBackground} />
