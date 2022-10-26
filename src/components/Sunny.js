@@ -7,6 +7,7 @@ import LoadSunny from "./LoadSunny";
 export default function Sunny({ modelPath, scale = 40, position = [0, 0, 0] }) {
   return (
     <Canvas
+      className="canvas"
       style={{ backgroundColor: "skyblue" }}
       camera={{
         fov: 60,

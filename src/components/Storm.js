@@ -8,6 +8,7 @@ import Rain from "./Rain";
 export default function Storm() {
   return (
     <Canvas
+      className="canvas"
       style={{ backgroundColor: "black" }}
       camera={{
         fov: 60,
