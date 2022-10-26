@@ -10,7 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
-  const [background, setBackground] = useState("sunny");
+  const [background, setBackground] = useState("storm");
 
   return (
     <div style={{ height: "100vh" }} className="App">
