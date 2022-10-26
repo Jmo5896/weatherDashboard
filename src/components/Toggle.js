@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-export default function Toggle({ switchBackground }) {
+export default function Toggle({ background, switchBackground }) {
   const handleClick = (e) => {
     const val = e.target.value;
     switchBackground(val);
@@ -13,7 +13,7 @@ export default function Toggle({ switchBackground }) {
       <Row>
         <Col xs={12}>
           <Button
-            variant="outline-dark"
+            variant={background === "storm" ? "dark" : "outline-dark"}
             size="sm"
             onClick={handleClick}
             value="storm"
@@ -23,7 +23,7 @@ export default function Toggle({ switchBackground }) {
         </Col>
         <Col xs={12}>
           <Button
-            variant="outline-dark"
+            variant={background === "sunny" ? "dark" : "outline-dark"}
             size="sm"
             onClick={handleClick}
             value="sunny"

@@ -14,7 +14,7 @@ function App() {
 
   return (
     <div style={{ height: "100vh" }} className="App">
-      <Toggle switchBackground={setBackground} />
+      <Toggle background={background} switchBackground={setBackground} />
       {background === "storm" ? <Storm /> : <Sunny modelPath={landScape} />}
     </div>
   );
