@@ -41,7 +41,7 @@ export default function Rain({ rainCount }) {
         <bufferAttribute
           ref={myDrops}
           attach="attributes-position"
-          count={positions.length / 3}
+          count={rainCount}
           array={positions}
           itemSize={3}
         />
