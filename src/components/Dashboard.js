@@ -21,7 +21,7 @@ export default function Dashboard({ partA, part4 }) {
         lat: coor.lat,
         lon: coor.lon,
       });
-      console.log(response.data);
+      //   console.log(response.data);
       setContent(response.data);
       isLoading(false);
     };
