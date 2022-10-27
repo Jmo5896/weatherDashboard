@@ -4,7 +4,16 @@ import Select from "react-select";
 
 import API from "../services/api";
 
-// https://openweathermap.org/img/w/${weather.weather[0].icon}.png
+import load from "../images/loading.gif";
+
+const customStyles = {
+  option: (provided) => ({
+    ...provided,
+    height: "100%",
+    color: "black",
+    paddingTop: "3px",
+  }),
+};
 
 export default function Dashboard({ partA, part4 }) {
   const [content, setContent] = useState();
@@ -35,11 +44,11 @@ export default function Dashboard({ partA, part4 }) {
     const val = e.value;
     const currentCities = API.getCities(val);
     setCities(currentCities);
-    // console.log(currentCities);
   };
 
   const onCitySelection = (e) => {
     setCoor(e.value);
+    setContent(null);
     isLoading(true);
   };
 
@@ -52,6 +61,7 @@ export default function Dashboard({ partA, part4 }) {
               <h4>Find Your Weather.</h4>
               <h5> Select State: </h5>
               <Select
+                styles={customStyles}
                 name="state"
                 onChange={onStateSelection}
                 options={states}
@@ -60,6 +70,7 @@ export default function Dashboard({ partA, part4 }) {
                 <>
                   <h5> Select City: </h5>
                   <Select
+                    styles={customStyles}
                     name="city"
                     onChange={onCitySelection}
                     options={cities}
@@ -72,7 +83,7 @@ export default function Dashboard({ partA, part4 }) {
             <Row>
               <Col xs={12}>
                 <div className="glass">
-                  {content && (
+                  {content ? (
                     <>
                       <h4>
                         Current Weather{" "}
@@ -86,7 +97,10 @@ export default function Dashboard({ partA, part4 }) {
                       <h5>Humidity: {content.current.humidity}%</h5>
                       <h5>UV Index: {content.current.uvi}</h5>
                     </>
+                  ) : (
+                    <h4>Pick a city to see the weather.</h4>
                   )}
+                  {loading && <img src={load} alt="loading gif" />}
                 </div>
               </Col>
               <Col xs={12}>
