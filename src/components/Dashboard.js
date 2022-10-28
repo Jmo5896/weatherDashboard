@@ -45,7 +45,7 @@ export default function Dashboard({ partA, part4 }) {
       const cleanForcast = forecastResponse.data.list.filter(
         (obj) => obj.dt_txt.split(" ")[1] === "15:00:00"
       );
-      console.log(cleanForcast);
+      // console.log(cleanForcast);
       setForecast(cleanForcast);
       setContent(response.data);
       isLoading(false);
