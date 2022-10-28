@@ -18,7 +18,7 @@
   position: absolute;
   z-index: 1;
   background-color: rgba(52, 52, 52, 0);
-  top: 15%;
+  top: 8%;
   width: 100vw;
 }
 
@@ -35,4 +35,5 @@
   /* padding-top:50px; */
   border:1px white solid;
   color: antiquewhite;
+  /* height: 90%; */
 }

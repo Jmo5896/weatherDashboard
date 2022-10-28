@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 
@@ -36,6 +36,15 @@ export default function Dashboard({ partA, part4 }) {
         lat: coor.lat,
         lon: coor.lon,
       });
+      // content.current.weather[0].icon
+      // https://openweathermap.org/img/w/${icon}.png
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "icon";
+        document.getElementsByTagName("head")[0].appendChild(link);
+      }
+      link.href = `https://openweathermap.org/img/w/${response.data.current.weather[0].icon}.png`;
 
       console.log(response.data);
       setContent(response.data);
@@ -91,7 +100,7 @@ export default function Dashboard({ partA, part4 }) {
           </Col>
           <Col md={9}>
             <Row>
-              <Col xs={6}>
+              <Col xs={4}>
                 <div className="glass">
                   {content ? (
                     <>
@@ -111,13 +120,7 @@ export default function Dashboard({ partA, part4 }) {
                   {loading && <img src={load} alt="loading gif" />}
                 </div>
               </Col>
-              {content && (
-                <Col xs={6}>
-                  <div className="glass">
-                    <WeatherChart data={content.hourly.slice(0, 24)} />
-                  </div>
-                </Col>
-              )}
+              {content && <WeatherChart data={content.hourly.slice(0, 24)} />}
             </Row>
           </Col>
           <Col xs={12}>
