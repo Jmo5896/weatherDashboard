@@ -4,20 +4,31 @@ import { Col, Row, Button } from "react-bootstrap";
 
 export default function WeatherChart({ data }) {
   const [width, setWidth] = useState(320);
-  const [chart, setChart] = useState("temp");
-  const chartRef = useRef();
-  const cleanData = {
+  const [chart, setChart] = useState({
+    text: "temp",
+    yAxis: "Degrees, Fahrenheit",
+  });
+  const [cleanData, setCleanData] = useState({
     x: data.map((obj) => new Date(obj.dt * 1000)),
     y: data.map((obj) => obj.temp),
-  };
-
+  });
+  const chartRef = useRef();
+  //   const cleanData = {
+  //     x: data.map((obj) => new Date(obj.dt * 1000)),
+  //     y: data.map((obj) => obj.temp),
+  //   };
+  //   console.log(data);
   useEffect(() => {
     setWidth(chartRef.current.offsetWidth - 80);
     // console.log("width", chartRef.current ? chartRef.current.offsetWidth : 0);
   }, [chartRef.current]);
 
   const handleClick = (e) => {
-    const val = e.target.value;
+    const cd = { ...cleanData };
+    const val = JSON.parse(e.target.value);
+    // console.log(val);
+    cd.y = data.map((obj) => obj[val.text]);
+    setCleanData(cd);
     setChart(val);
   };
 
@@ -27,30 +38,39 @@ export default function WeatherChart({ data }) {
         <Row>
           <Col xs={2}>
             <Button
-              variant={chart === "temp" ? "dark" : "outline-dark"}
+              variant={chart.text === "temp" ? "dark" : "outline-dark"}
               size="sm"
               onClick={handleClick}
-              value="temp"
+              value={JSON.stringify({
+                text: "temp",
+                yAxis: "Degrees, Fahrenheit",
+              })}
             >
               Temp
             </Button>
           </Col>
           <Col xs={2}>
             <Button
-              variant={chart === "humidity" ? "dark" : "outline-dark"}
+              variant={chart.text === "humidity" ? "dark" : "outline-dark"}
               size="sm"
               onClick={handleClick}
-              value="humidity"
+              value={JSON.stringify({
+                text: "humidity",
+                yAxis: "Percentage (%)",
+              })}
             >
               Humidity
             </Button>
           </Col>
           <Col xs={2}>
             <Button
-              variant={chart === "wind" ? "dark" : "outline-dark"}
+              variant={chart.text === "wind_speed" ? "dark" : "outline-dark"}
               size="sm"
               onClick={handleClick}
-              value="wind"
+              value={JSON.stringify({
+                text: "wind_speed",
+                yAxis: "Miles per Hour (mph)",
+              })}
             >
               Wind
             </Button>
@@ -72,13 +92,13 @@ export default function WeatherChart({ data }) {
             // width: 320,
             // height: 240,
             title: {
-              text: "Daily Temp Chart",
+              text: chart.text.toUpperCase(),
               font: {
                 color: "antiquewhite",
               },
             },
             yaxis: {
-              title: "Degrees, Fahrenheit",
+              title: chart.yAxis,
               color: "antiquewhite",
               gridcolor: "black",
             },
