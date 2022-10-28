@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 
+import WeatherIcon from "./WeatherIcon";
 import API from "../services/api";
 
 import load from "../images/loading.gif";
@@ -16,7 +17,8 @@ const customStyles = {
 };
 
 export default function Dashboard({ partA, part4 }) {
-  const [content, setContent] = useState();
+  const [content, setContent] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState(API.getStates());
@@ -30,7 +32,15 @@ export default function Dashboard({ partA, part4 }) {
         lat: coor.lat,
         lon: coor.lon,
       });
-      //   console.log(response.data);
+      const forecastResponse = await API.getForecast({
+        api_key: x,
+        lat: coor.lat,
+        lon: coor.lon,
+      });
+      const cleanForcast = forecastResponse.data.list.filter(
+        (obj) => obj.dt_txt.split(" ")[1] === "15:00:00"
+      );
+      console.log(cleanForcast);
       setContent(response.data);
       isLoading(false);
     };
@@ -87,10 +97,7 @@ export default function Dashboard({ partA, part4 }) {
                     <>
                       <h4>
                         Current Weather{" "}
-                        <img
-                          src={`https://openweathermap.org/img/w/${content.current.weather[0].icon}.png`}
-                          alt="weather icon"
-                        />
+                        <WeatherIcon icon={content.current.weather[0].icon} />
                       </h4>
                       <h5>Temperature: {content.current.temp}° F</h5>
                       <h5>Wind: {content.current.wind_speed} mph</h5>

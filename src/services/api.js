@@ -9,12 +9,19 @@ const buildTHeThing = (arr1, arr2) => {
   return newOutput.join("");
 };
 
-const url = `https://api.openweathermap.org/data/3.0/onecall?units=imperial`;
+const url = `https://api.openweathermap.org/data`;
 
 const API = {
   parser: buildTHeThing,
   getWeather: async ({ api_key, lat, lon }) => {
-    return await axios.get(`${url}&appid=${api_key}&lat=${lat}&lon=${lon}`);
+    return await axios.get(
+      `${url}/3.0/onecall?units=imperial&appid=${api_key}&lat=${lat}&lon=${lon}`
+    );
+  },
+  getForecast: async ({ api_key, lat, lon }) => {
+    return await axios.get(
+      `${url}/2.5/forecast?units=imperial&appid=${api_key}&lat=${lat}&lon=${lon}`
+    );
   },
   getCities: (state) => {
     return usCities.filter((obj) => obj.state === state);
