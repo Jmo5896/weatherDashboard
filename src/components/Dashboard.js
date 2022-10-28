@@ -4,6 +4,7 @@ import Select from "react-select";
 
 import WeatherIcon from "./WeatherIcon";
 import WeatherCard from "./WeatherCard";
+import WeatherChart from "./WeatherChart";
 import API from "../services/api";
 
 import load from "../images/loading.gif";
@@ -23,10 +24,8 @@ const customStyles = {
 
 export default function Dashboard({ partA, part4 }) {
   const [content, setContent] = useState(null);
-  const [forecast, setForecast] = useState(null);
   const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
-  // const [states, setStates] = useState(API.getStates());
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
@@ -37,16 +36,8 @@ export default function Dashboard({ partA, part4 }) {
         lat: coor.lat,
         lon: coor.lon,
       });
-      const forecastResponse = await API.getForecast({
-        api_key: x,
-        lat: coor.lat,
-        lon: coor.lon,
-      });
-      const cleanForcast = forecastResponse.data.list.filter(
-        (obj) => obj.dt_txt.split(" ")[1] === "15:00:00"
-      );
-      // console.log(cleanForcast);
-      setForecast(cleanForcast);
+
+      console.log(response.data);
       setContent(response.data);
       isLoading(false);
     };
@@ -63,7 +54,7 @@ export default function Dashboard({ partA, part4 }) {
   };
 
   const onCitySelection = (e) => {
-    console.log(e);
+    // console.log(e);
     setCoor({ ...e.value, city: e.label.split(", ")[0] });
     setContent(null);
     isLoading(true);
@@ -120,24 +111,33 @@ export default function Dashboard({ partA, part4 }) {
                   {loading && <img src={load} alt="loading gif" />}
                 </div>
               </Col>
+              {content && (
+                <Col xs={6}>
+                  <div className="glass">
+                    <WeatherChart data={content.hourly.slice(0, 24)} />
+                  </div>
+                </Col>
+              )}
             </Row>
           </Col>
           <Col xs={12}>
             <div className="glass">
-              <h4>5 Day Forecast</h4>
               <Row>
-                {forecast ? (
-                  forecast.map((obj, i) => (
-                    <Col key={i}>
-                      <WeatherCard
-                        icon={obj.weather[0].icon}
-                        date={API.dateFormater(obj.dt)}
-                        temp={obj.main.temp}
-                        wind={obj.wind.speed}
-                        humidity={obj.main.humidity}
-                      />
-                    </Col>
-                  ))
+                {content ? (
+                  <>
+                    <h4>5 Day Forecast</h4>
+                    {content.daily.slice(1, 6).map((obj, i) => (
+                      <Col key={i}>
+                        <WeatherCard
+                          icon={obj.weather[0].icon}
+                          date={API.dateFormater(obj.dt)}
+                          temp={obj.temp.day}
+                          wind={obj.wind_speed}
+                          humidity={obj.humidity}
+                        />
+                      </Col>
+                    ))}
+                  </>
                 ) : (
                   <Col xs={12}>
                     <h4>Pick a city to see the forecast.</h4>

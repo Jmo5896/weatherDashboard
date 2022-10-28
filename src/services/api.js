@@ -24,11 +24,6 @@ const API = {
       `${url}/3.0/onecall?units=imperial&appid=${api_key}&lat=${lat}&lon=${lon}`
     );
   },
-  getForecast: async ({ api_key, lat, lon }) => {
-    return await axios.get(
-      `${url}/2.5/forecast?units=imperial&appid=${api_key}&lat=${lat}&lon=${lon}`
-    );
-  },
   getCities: (state) => {
     return usCities.filter((obj) => obj.state === state);
   },
