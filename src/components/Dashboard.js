@@ -29,7 +29,7 @@ export default function Dashboard({ partA, part4 }) {
   const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
   const [favorites, setFavorites] = useState(
-    JSON.parse(localStorage.getItem("favoriteCities"))
+    JSON.parse(localStorage.getItem("favoriteCities")) || {}
   );
   const [loading, isLoading] = useState(false);
 
