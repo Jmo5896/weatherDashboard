@@ -25,7 +25,14 @@ const API = {
     );
   },
   getCities: (state) => {
-    return usCities.filter((obj) => obj.state === state);
+    return [
+      {
+        label: "Select...",
+        state: "",
+        value: false,
+      },
+      ...usCities.filter((obj) => obj.state === state),
+    ];
   },
   getStates: () => {
     return states;

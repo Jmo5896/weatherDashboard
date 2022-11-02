@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
+import star from "bootstrap-icons/icons/star.svg";
+import favStar from "bootstrap-icons/icons/star-fill.svg";
 
 import WeatherIcon from "./WeatherIcon";
 import WeatherCard from "./WeatherCard";
@@ -26,7 +28,9 @@ export default function Dashboard({ partA, part4 }) {
   const [content, setContent] = useState(null);
   const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
-  const [favorites, setFavorites] = useState({});
+  const [favorites, setFavorites] = useState(
+    JSON.parse(localStorage.getItem("favoriteCities"))
+  );
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
@@ -64,22 +68,42 @@ export default function Dashboard({ partA, part4 }) {
   };
 
   const onFavClick = (e) => {
-    const val = e.target;
+    const currentCity = e.target.textContent;
+    const currentCoord = JSON.parse(e.target.value);
+    setCoor({ ...currentCoord, city: currentCity });
+    setContent(null);
+    isLoading(true);
+  };
+
+  const handleFavorite = (e) => {
+    const searched = { ...favorites };
+    const val = e.target.dataset.value;
     console.log(val);
+    searched[val].fav = !searched[val].fav;
+    const newFavList = {};
+    for (const city in searched) {
+      if (searched[city].fav) {
+        newFavList[city] = searched[city];
+      }
+    }
+    localStorage.setItem("favoriteCities", JSON.stringify(newFavList));
+    setFavorites(searched);
   };
 
   const onCitySelection = (e) => {
     // console.log(e);
     const searched = { ...favorites };
     const currentCity = e.label.split(", ")[0];
-    searched[currentCity] = searched[currentCity] || {
-      coor: { ...e.value },
-      fav: false,
-    };
-    setFavorites(searched);
-    setCoor({ ...e.value, city: currentCity });
-    setContent(null);
-    isLoading(true);
+    if (e.value) {
+      searched[currentCity] = searched[currentCity] || {
+        coor: { ...e.value },
+        fav: false,
+      };
+      setFavorites(searched);
+      setCoor({ ...e.value, city: currentCity });
+      setContent(null);
+      isLoading(true);
+    }
   };
 
   return (
@@ -110,12 +134,27 @@ export default function Dashboard({ partA, part4 }) {
                 </>
               )}
               <h5>Searched Cities: </h5>
-              <ul style={{ listStyle: "none" }}>
+              <ul
+                style={{
+                  listStyle: "none",
+                  // overflowY: "scroll",
+                  // overflow: "auto",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
                 {Object.keys(favorites).length > 0 &&
                   Object.entries(favorites).map(([city, info], i) => (
-                    <li key={i}>
+                    <li key={i} className="pb-1">
+                      <img
+                        className="fav-icon"
+                        onClick={handleFavorite}
+                        data-value={city}
+                        src={info.fav ? favStar : star}
+                        alt="selection icon"
+                      />
                       <Button
-                        variant={info.fav ? "sucess" : "secondary"}
+                        variant={info.fav ? "success" : "secondary"}
                         size="sm"
                         value={JSON.stringify(info.coor)}
                         onClick={onFavClick}
@@ -133,8 +172,9 @@ export default function Dashboard({ partA, part4 }) {
                 <div className="glass">
                   {content ? (
                     <>
+                      <h4>Current Weather:</h4>
                       <h4>
-                        Current Weather for {coor.city}
+                        {coor.city}
                         <WeatherIcon icon={content.current.weather[0].icon} />
                       </h4>
                       <h5>Date: {API.dateFormater(content.current.dt)}</h5>
