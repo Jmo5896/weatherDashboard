@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
 
 import WeatherIcon from "./WeatherIcon";
@@ -26,6 +26,7 @@ export default function Dashboard({ partA, part4 }) {
   const [content, setContent] = useState(null);
   const [coor, setCoor] = useState({});
   const [cities, setCities] = useState([]);
+  const [favorites, setFavorites] = useState({});
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function Dashboard({ partA, part4 }) {
       }
       link.href = `https://openweathermap.org/img/w/${response.data.current.weather[0].icon}.png`;
 
-      console.log(response.data);
+      // console.log(response.data);
       setContent(response.data);
       isLoading(false);
     };
@@ -62,9 +63,21 @@ export default function Dashboard({ partA, part4 }) {
     setCities(currentCities);
   };
 
+  const onFavClick = (e) => {
+    const val = e.target;
+    console.log(val);
+  };
+
   const onCitySelection = (e) => {
     // console.log(e);
-    setCoor({ ...e.value, city: e.label.split(", ")[0] });
+    const searched = { ...favorites };
+    const currentCity = e.label.split(", ")[0];
+    searched[currentCity] = searched[currentCity] || {
+      coor: { ...e.value },
+      fav: false,
+    };
+    setFavorites(searched);
+    setCoor({ ...e.value, city: currentCity });
     setContent(null);
     isLoading(true);
   };
@@ -96,6 +109,22 @@ export default function Dashboard({ partA, part4 }) {
                   />
                 </>
               )}
+              <h5>Searched Cities: </h5>
+              <ul style={{ listStyle: "none" }}>
+                {Object.keys(favorites).length > 0 &&
+                  Object.entries(favorites).map(([city, info], i) => (
+                    <li key={i}>
+                      <Button
+                        variant={info.fav ? "sucess" : "secondary"}
+                        size="sm"
+                        value={JSON.stringify(info.coor)}
+                        onClick={onFavClick}
+                      >
+                        {city}
+                      </Button>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </Col>
           <Col md={9}>
